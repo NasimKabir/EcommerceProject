@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,17 +23,17 @@ public class User {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int id;
 
-	    @Size(min=5)
+	    @Size(min=4,message = "Username must be atleast 4 characters")
 	    private String username;
 
-	    @Size(min=4)
-	    //@JsonIgnore
+	    @Size(min=4,message = "Password must be atleast 4 ")
+	    @JsonIgnore
 	    private String password;
 
-	    @NotNull
+	    @NotNull(message = "Firstname can not empty ")
 	    private String firstName;
 
-	    @NotNull
+	    @NotNull(message = "Lastname can not empty ")
 	    private String lastName;
 
 	    @ManyToMany(cascade = CascadeType.MERGE)

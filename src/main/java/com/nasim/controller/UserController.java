@@ -17,35 +17,27 @@ import com.nasim.repository.RoleRepository;
 import com.nasim.repository.UserRepository;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
-
-//	@Autowired
-//	private AuthenticationManager authenticationManager;
-//
-//	@Autowired
-//	private CustomUserDetailsService customUserDetailsService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	RoleRepository roleRepository;
-	
 
-	@PostMapping("/create")
+	@PostMapping("create")
 	public ResponseEntity<User> createdPost(@Valid @RequestBody User user, BindingResult result) {
-		if (userRepository.existsByUsername(user.getUsername())) {
+		if (result.hasErrors()) {
 			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
-		}else if(result.hasErrors()) {
+		} else if (userRepository.existsByUsername(user.getUsername())) {
 			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 	}
-
 
 }
