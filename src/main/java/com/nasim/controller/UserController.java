@@ -29,10 +29,8 @@ public class UserController {
 	RoleRepository roleRepository;
 
 	@PostMapping("create")
-	public ResponseEntity<User> createdPost(@Valid @RequestBody User user, BindingResult result) {
-		if (result.hasErrors()) {
-			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
-		} else if (userRepository.existsByUsername(user.getUsername())) {
+	public ResponseEntity<User> createdPost(@Valid @RequestBody User user) {
+		 if (userRepository.existsByUsername(user.getUsername())) {
 			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));

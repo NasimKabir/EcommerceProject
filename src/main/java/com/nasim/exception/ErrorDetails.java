@@ -1,24 +1,25 @@
 package com.nasim.exception;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ErrorDetails {
-	private String title;
+
+	private Date timeStamp;
+	
 	private int status;
+	
+	private String title;
+	
 	private String detail;
-	private long timeStamp;
-	private String developerMessage;
+	
+	private Map<String,List<FieldValidationError>>errors= new HashMap<String, List<FieldValidationError>>();
 
-	public ErrorDetails(long timeStamp, int status, String detail, String title, String developerMessage) {
-		this.title = title;
-		this.status = status;
-		this.detail = detail;
-		this.timeStamp = timeStamp;
-		this.developerMessage = developerMessage;
-	}
-
+	
+	
+	
 	public String getTitle() {
 		return title;
 	}
@@ -43,20 +44,23 @@ public class ErrorDetails {
 		this.detail = detail;
 	}
 
-	public long getTimeStamp() {
+	
+
+	public Date getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(long timeStamp) {
+	public void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
-	public String getDeveloperMessage() {
-		return developerMessage;
+	public Map<String, List<FieldValidationError>> getErrors() {
+		return errors;
 	}
 
-	public void setDeveloperMessage(String developerMessage) {
-		this.developerMessage = developerMessage;
+	public void setErrors(Map<String, List<FieldValidationError>> errors) {
+		this.errors = errors;
 	}
 
+	
 }
