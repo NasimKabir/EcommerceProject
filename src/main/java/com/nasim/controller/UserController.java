@@ -31,7 +31,7 @@ public class UserController {
 	@PostMapping("create")
 	public ResponseEntity<User> createdPost(@Valid @RequestBody User user) {
 		 if (userRepository.existsByUsername(user.getUsername())) {
-			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
+			 throw new RuntimeException(user.getUsername()+" doesn't exists !");
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
