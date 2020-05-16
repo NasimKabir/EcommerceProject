@@ -1,5 +1,6 @@
 package com.nasim.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -41,6 +42,10 @@ public class User {
 		           joinColumns = {@JoinColumn(name="USER_ID",referencedColumnName = "Id")},
 		           inverseJoinColumns = {@JoinColumn(name="ROLE_ID",referencedColumnName = "ID")})
 	    private List<Role> roles;
+	    
+	    private Date createdDate;
+	    
+	    private Date updatedDate;
 
 	    
 	    
@@ -98,7 +103,26 @@ public class User {
 		public void setRoles(List<Role> roles) {
 			this.roles = roles;
 		}
-	    
-	    
-	    
+
+		public Date getCreatedDate() {
+			return createdDate;
+		}
+
+		public void setCreatedDate(Date createdDate) {
+			this.createdDate = createdDate;
+		}
+
+		public Date getUpdatedDate() {
+			return updatedDate;
+		}
+
+		public void setUpdatedDate(Date updatedDate) {
+			this.updatedDate = updatedDate;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		
 }

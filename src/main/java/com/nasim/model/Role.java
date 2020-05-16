@@ -1,5 +1,7 @@
 package com.nasim.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +22,8 @@ public class Role {
 	@Column(nullable=false,unique = true)
 	private String name;
 	
+	 private Date createdDate;
+	
 	
     public Role() {
     }
@@ -38,6 +42,18 @@ public class Role {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	

@@ -30,12 +30,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	// user not found exception
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public final ResponseEntity<Object> handleUserNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+	@ExceptionHandler(UserNotFoundException.class)
+	public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
 		ErrorDetails exceptionResponse = new ErrorDetails();
 		exceptionResponse.setTimeStamp(new Date());
 		exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
-		exceptionResponse.setTitle("Resource Not Found Exception");
+		exceptionResponse.setTitle("User Not Found Exception");
 		exceptionResponse.setDetail(ex.getMessage());
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
