@@ -12,8 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,8 +48,14 @@ public class User {
 		           inverseJoinColumns = {@JoinColumn(name="ROLE_ID",referencedColumnName = "ID")})
 	    private List<Role> roles;
 	    
+	    @NotEmpty(message = "Date can't empty")
+		@Temporal(TemporalType.DATE)
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 	    private Date createdDate;
 	    
+	    @NotEmpty(message = "Date can't empty")
+		@Temporal(TemporalType.DATE)
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 	    private Date updatedDate;
 
 	    
