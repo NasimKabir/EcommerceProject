@@ -32,8 +32,8 @@ public class UserController {
 	@Autowired
 	RoleRepository roleRepository;
 
-	@PostMapping("create")
-	public ResponseEntity<User> createdPost(@Valid @RequestBody User user) {
+	@PostMapping("/users")
+	public ResponseEntity<User> createdUser(@Valid @RequestBody User user) {
 		if (userRepository.existsByUsername(user.getUsername())) {
 			throw new RuntimeException(user.getUsername() + " doesn't exists !");
 		}
