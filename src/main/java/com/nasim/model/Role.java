@@ -7,9 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 
 @Entity
 @Table(name = "roles")
+@Data
 public class Role {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,33 +22,6 @@ public class Role {
 
 	@Column(nullable=false,unique = true)
 	private String name;
-	
-	
-	
-    public Role() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	
     
 }

@@ -8,5 +8,6 @@ import com.nasim.model.Category;
 
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-	Optional<Category> findByCategoryName(String categoryName);
+	Optional<Category> findByName(String categoryName);
+	Boolean existsByName(String categoryName);
 }
