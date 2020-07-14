@@ -38,8 +38,6 @@ public class Product {
 	@NotNull
 	private String productDetails;
 
-	
-
 	@NotNull
 	private String gender;
 
@@ -47,4 +45,5 @@ public class Product {
 	@JsonManagedReference
 	private Set<Category> categories;
 
+	private String imagePath;
 }
