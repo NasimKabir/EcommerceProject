@@ -1,5 +1,6 @@
 package com.nasim.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -43,7 +44,7 @@ public class Product {
 
 	@OneToMany( mappedBy = "product")
 	@JsonManagedReference
-	private Set<Category> categories;
+	private List<Category> categories;
 
 	private String imagePath;
 }
