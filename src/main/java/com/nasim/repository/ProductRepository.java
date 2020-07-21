@@ -11,6 +11,7 @@ import com.nasim.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 	List<Product> findAllByGender(String gender);
+//	Category findByCategoriesId(int id);
 	Product findByCategoriesId(int id);
 
 }

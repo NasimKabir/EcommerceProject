@@ -2,6 +2,7 @@ package com.nasim.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,12 +25,6 @@ public class Category {
 	
 	 @NotNull
 	private String name;
-	
-
-	@ManyToOne(cascade = CascadeType.MERGE)
-    @JsonBackReference
-    private Product product;
-	
 	
 	
 

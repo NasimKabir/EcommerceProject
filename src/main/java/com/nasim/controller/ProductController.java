@@ -1,5 +1,8 @@
 package com.nasim.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
@@ -28,37 +31,32 @@ public class ProductController {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
 	
-	@GetMapping(path="/id")
-	public String findID(@RequestParam(value="id") int id){
-		String categoryName=categoryRepository.findById(id).get().getName();
-		System.out.println("category name is = "+categoryName); 
-		
-		return categoryName;
-	}
 
 	@PostMapping(path = "/products")
-	public ResponseEntity<?> addNewProduct(@RequestParam(value = "data") String data,@RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<?> addNewProduct(@ModelAttribute Product product, @RequestParam(value = "data") String data,
+			@RequestParam("file") MultipartFile file) throws Exception {
 
 		if (file == null || file.getOriginalFilename() == null) {
 			System.out.println("File not found");
 		}
 		System.out.println(data);
-		Product product = new Product();
+        
+		String categoryName=categoryRepository.findAll().listIterator().next().getName();
 		
-		String categoryName=categoryRepository.findById(1).get().getName();
-		System.out.println("catgory name is = "+categoryName); 
-		
-		
-		product = FileUploadUtil.convertStringToProduct(data);
+		System.out.println("catgory name is = " + categoryName);
 
 		
-		FileUploadUtil.uploadFile(file, categoryName, product.getProductName(), defaultFilePath);
-
-		String staticPath = FileUploadUtil.creatStaticPath(product.getCategories().getClass().getName(),
-				product.getProductName(), file.getOriginalFilename());
-		product.setImagePath(staticPath);
-		productRepository.save(product);
+		  product = FileUploadUtil.convertStringToProduct(data);
+		  
+		  
+		  FileUploadUtil.uploadFile(file, categoryName, product.getProductName(),
+		  defaultFilePath);
+		  
+		  String staticPath = FileUploadUtil.creatStaticPath(product.getCategories().getClass().getName(), product.getProductName(), file.getOriginalFilename());
+		  product.setImagePath(staticPath); productRepository.save(product);
+		 
 
 		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 
