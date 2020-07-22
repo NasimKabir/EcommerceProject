@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ErrorDetails {
+public class GlobalException {
 
 	private Date timeStamp;
 	
@@ -15,7 +15,7 @@ public class ErrorDetails {
 	
 	private String detail;
 	
-	private Map<String,List<FieldValidationError>>errors= new HashMap<String, List<FieldValidationError>>();
+	private Map<String,List<FormFieldValidationError>>errors= new HashMap<String, List<FormFieldValidationError>>();
 
 	
 	
@@ -54,11 +54,11 @@ public class ErrorDetails {
 		this.timeStamp = timeStamp;
 	}
 
-	public Map<String, List<FieldValidationError>> getErrors() {
+	public Map<String, List<FormFieldValidationError>> getErrors() {
 		return errors;
 	}
 
-	public void setErrors(Map<String, List<FieldValidationError>> errors) {
+	public void setErrors(Map<String, List<FormFieldValidationError>> errors) {
 		this.errors = errors;
 	}
 

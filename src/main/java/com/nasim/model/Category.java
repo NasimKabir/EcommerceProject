@@ -1,6 +1,7 @@
 package com.nasim.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,8 @@ import lombok.Data;
 public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column( unique = true, nullable = false)
+
 	private int id;
 	
 	 @NotNull

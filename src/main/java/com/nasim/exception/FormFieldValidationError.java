@@ -1,6 +1,6 @@
 package com.nasim.exception;
 
-public class FieldValidationError {
+public class FormFieldValidationError {
 private String code;
 private String message;
 

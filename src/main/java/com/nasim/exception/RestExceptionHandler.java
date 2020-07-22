@@ -9,16 +9,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-
+@ControllerAdvice
+@RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      // internal exception
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-		ErrorDetails exceptionResponse = new ErrorDetails();
+		GlobalException exceptionResponse = new GlobalException();
 		exceptionResponse.setTimeStamp(new Date());
 		exceptionResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		exceptionResponse.setTitle("Internal Server Exception");
@@ -29,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	// user not found exception
 	@ExceptionHandler(UserNotFoundException.class)
 	public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-		ErrorDetails exceptionResponse = new ErrorDetails();
+		GlobalException exceptionResponse = new GlobalException();
 		exceptionResponse.setTimeStamp(new Date());
 		exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
 		exceptionResponse.setTitle("User Not Found Exception");
@@ -42,7 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		ErrorDetails exceptionResponse = new ErrorDetails();
+		GlobalException exceptionResponse = new GlobalException();
 		exceptionResponse.setTimeStamp(new Date());
 		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
 		exceptionResponse.setTitle("Bad Request 1");
@@ -50,13 +53,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 		List<FieldError> fieldError = ex.getBindingResult().getFieldErrors();
 		for (FieldError error : fieldError) {
-			List<FieldValidationError> fErrorList = exceptionResponse.getErrors().get(error.getField());
+			List<FormFieldValidationError> fErrorList = exceptionResponse.getErrors().get(error.getField());
 			if (fErrorList == null) {
-				fErrorList = new ArrayList<FieldValidationError>();
+				fErrorList = new ArrayList<FormFieldValidationError>();
 				exceptionResponse.getErrors().put(error.getField(), fErrorList);
 			}
 
-			FieldValidationError vError = new FieldValidationError();
+			FormFieldValidationError vError = new FormFieldValidationError();
 			vError.setCode(error.getCode());
 			vError.setMessage(error.getDefaultMessage());
 			fErrorList.add(vError);
@@ -64,5 +67,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	
+	// Storage File not found exception
+		@ExceptionHandler(StorageFileNotFoundException.class)
+		public final ResponseEntity<Object> handleStorageFileNotFoundException(StorageFileNotFoundException ex, WebRequest request) {
+			GlobalException exceptionResponse = new GlobalException();
+			exceptionResponse.setTimeStamp(new Date());
+			exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
+			exceptionResponse.setTitle("Storeage File Not Found Exception");
+			exceptionResponse.setDetail(ex.getMessage());
+			return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NOT_FOUND);
+		}
 
 }
