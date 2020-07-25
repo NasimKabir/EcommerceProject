@@ -7,3 +7,6 @@ After inseting category then insert product where you can chose category.
 
 ![image](https://user-images.githubusercontent.com/31030260/88460984-24869b00-cec2-11ea-94e9-94321eb7c957.png)
 
+
+Product list
+![image](https://user-images.githubusercontent.com/31030260/88461446-606f2f80-cec5-11ea-869b-c255c6535c13.png)
