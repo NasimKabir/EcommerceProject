@@ -10,13 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.google.gson.Gson;
+import com.nasim.exception.FileStorageException;
 import com.nasim.model.Product;
 
 public class FileUploadUtil {
 	public static String uploadFile(MultipartFile file, String category,String productName,String defaultFilePath) throws Exception {
 		String filePath = "";
 		if (file.isEmpty()) {
-			throw new Exception("Error while saving file first");
+			throw new FileStorageException("File not Found, Please Select your file "+file.getOriginalFilename());
 		}
 		try {
 			String message=createFolder(defaultFilePath, category,productName);
@@ -25,17 +26,13 @@ public class FileUploadUtil {
 			if(file.getOriginalFilename()!=null) {
 			filePath = defaultFilePath + "\\" + category+ "\\"+productName+"\\"+ file.getOriginalFilename();
 			Path path = Paths.get(filePath);
-			System.out.println("---------------"+path);
 			Files.write(path, bytes);
-			System.out.println("------***********----------           ***********" );
 			}
 			}else {
-				throw new Exception("Error while saving file second");
-			}
+				throw new FileStorageException("Failed to store file "+file.getOriginalFilename());			}
 		} catch (IOException e) {
-			throw new Exception("Error while saving file universal");
+			throw new FileStorageException("File can not store "+file.getOriginalFilename(),e);
 		}
-		System.out.println("************** ----------------+ "+filePath);
 		return filePath;
 	}
 	

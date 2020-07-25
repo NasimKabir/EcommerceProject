@@ -55,5 +55,7 @@ public class UserController {
 				  .orElseThrow(()->new UserNotFoundException("User Id - "+id+" Not found."));
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
+	
+	
 
 }

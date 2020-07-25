@@ -16,22 +16,27 @@ public class Product {
 	@Column(unique = true,nullable = false)
 	private int id;
 
-	@NotNull
+	@NotNull(message = "productCode can not empty ")
 	private String productCode;
 
-	@NotNull
+	@NotNull(message = "productName can not empty ")
+
 	private String productName;
 
-	@NotNull
+	@NotNull(message = "description can not empty ")
+
 	private String description;
 
-	@NotNull
+	@NotNull(message = "price can not empty ")
+
 	private Double price;
 
-	@NotNull
+	@NotNull(message = "productDetails can not empty ")
+
 	private String productDetails;
 
-	@NotNull
+	@NotNull(message = "Gender can not empty ")
+
 	private String gender;
 
 	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
@@ -40,6 +45,8 @@ public class Product {
 	inverseJoinColumns = {
 			@JoinColumn(name = "category_id", referencedColumnName = "ID") })
 	private List<Category> categories;
+
+	@NotNull(message = "imagePath can not empty ")
 
 	private String imagePath;
 }

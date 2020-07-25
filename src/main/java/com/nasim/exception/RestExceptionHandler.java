@@ -68,16 +68,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 	
-	
-	// Storage File not found exception
-		@ExceptionHandler(StorageFileNotFoundException.class)
-		public final ResponseEntity<Object> handleStorageFileNotFoundException(StorageFileNotFoundException ex, WebRequest request) {
+	// user not found exception
+		@ExceptionHandler(ProductNotFoundException.class)
+		public final ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex, WebRequest request) {
 			GlobalException exceptionResponse = new GlobalException();
 			exceptionResponse.setTimeStamp(new Date());
 			exceptionResponse.setStatus(HttpStatus.NOT_FOUND.value());
-			exceptionResponse.setTitle("Storeage File Not Found Exception");
+			exceptionResponse.setTitle("Product Not Found Exception");
 			exceptionResponse.setDetail(ex.getMessage());
 			return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
-
+	
 }
