@@ -1,8 +1,17 @@
 package com.nasim.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +54,7 @@ public class ProductController {
 	}
 
 	@PostMapping(path = "/products")
-	public ResponseEntity<?> addNewProduct(@Valid @ModelAttribute Product product, @RequestParam(value = "data") String data,@RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<?> addNewProduct( @ModelAttribute Product product, @RequestParam(value = "data") String data,@RequestParam("file") MultipartFile file) throws Exception {
 
 		String categoryName=categoryRepository.findAll().listIterator().next().getName();
 		 product = FileUploadUtil.convertStringToProduct(data);
@@ -63,7 +73,6 @@ public class ProductController {
 	public ResponseEntity<?>getProductId(@PathVariable("id") int id){
 		Product product=productRepository.findById(id)
 				.orElseThrow(()->new ProductNotFoundException("Product id "+id+" not found."));
-		System.out.println("----------- ********** "+product);
 		return new ResponseEntity<Product>(product,HttpStatus.OK);
 	}
 	
@@ -72,8 +81,31 @@ public class ProductController {
 		Product product=productRepository.findById(id)
 				.orElseThrow(()->new ProductNotFoundException("Product id "+id+" not found."));
 		productRepository.deleteById(id);
-		System.out.println("----------- ********** "+product);
 		return new ResponseEntity<Product>(product,HttpStatus.OK);
 	}
+	
+	@PutMapping(path = "/products/{id}")
+	public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody Product product) throws Exception {
+
+	Product	updatedProduct=productRepository.findById(id)
+				.orElseThrow(()->new ProductNotFoundException("Product id "+id+" not found."));
+		
+		 if(updatedProduct == null){
+	            return null;
+	        }
+
+	        updatedProduct.setProductName(product.getProductName());
+	        updatedProduct.setPrice(product.getPrice());
+	        updatedProduct.setGender(product.getGender());
+	        updatedProduct.setDescription(product.getDescription());
+	        updatedProduct.setProductDetails(product.getProductDetails());
+	        
+		  productRepository.save(updatedProduct);
+		 
+		return new ResponseEntity<Product>(updatedProduct, HttpStatus.CREATED);
+	
+	}
+	
+	
 
 }
