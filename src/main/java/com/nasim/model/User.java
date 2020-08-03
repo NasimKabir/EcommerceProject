@@ -4,9 +4,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -19,12 +16,11 @@ import lombok.Data;
 @Entity
 @Table(name = "users")
 @Data
-public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+public class User extends BaseModel{
+	
+	private static final long serialVersionUID = 1L;
 
-	 @Size(min=4,message = "Username must be atleast 4 characters")
+	@Size(min=4,message = "Username must be atleast 4 characters")
 	private String username;
 
 	 @Size(min=4,message = "Password must be atleast 4 ")

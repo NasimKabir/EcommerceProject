@@ -1,7 +1,14 @@
 package com.nasim.model;
 
 import java.util.List;
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -10,11 +17,9 @@ import lombok.Data;
 @Entity
 @Table(name = "products")
 @Data
-public class Product {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(unique = true,nullable = false)
-	private int id;
+public class Product extends BaseModel{
+
+	private static final long serialVersionUID = 1L;
 
 	@NotNull(message = "productCode can not empty ")
 	private String productCode;

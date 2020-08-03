@@ -1,17 +1,8 @@
 package com.nasim.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 
@@ -19,14 +10,10 @@ import lombok.Data;
 @Entity
 @Table(name = "categories")
 @Data
-public class Category {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column( unique = true, nullable = false)
+public class Category extends BaseModel{
 
-	private int id;
-	
-	 @NotNull
+	private static final long serialVersionUID = 1L;
+	@NotNull
 	private String name;
 	
 	
