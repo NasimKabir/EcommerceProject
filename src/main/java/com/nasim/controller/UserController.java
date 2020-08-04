@@ -11,11 +11,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nasim.exception.ProductNotFoundException;
 import com.nasim.exception.UserNotFoundException;
+import com.nasim.model.Role;
 import com.nasim.model.User;
 import com.nasim.repository.RoleRepository;
 import com.nasim.repository.UserRepository;
@@ -38,6 +41,7 @@ public class UserController {
 			throw new RuntimeException(user.getUsername() + " doesn't exists !");
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setIsActive(true);
 		userRepository.save(user);
 		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 	}
@@ -56,6 +60,17 @@ public class UserController {
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 	
+	
+	@PutMapping(path = "/users/{id}")
+	public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+
+		User userUpdated=userRepository.findById(id)
+				  .orElseThrow(()->new UserNotFoundException("User Id - "+id+" Not found."));
+		userRepository.save(userUpdated);
+
+		return new ResponseEntity<User>(user, HttpStatus.CREATED);
+
+	}
 	
 
 }
