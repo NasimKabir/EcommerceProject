@@ -1,6 +1,10 @@
 package com.nasim.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -9,7 +13,7 @@ import lombok.Data;
 public class OrderItems {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private int id;
 
 	private int productId;
 	private int productQuantity;
@@ -17,6 +21,5 @@ public class OrderItems {
 	private String productName;
 
 	@ManyToOne
-	@JoinColumn(name = "order_id")
 	private Order order;
 }

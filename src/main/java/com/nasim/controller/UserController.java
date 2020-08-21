@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nasim.exception.ProductNotFoundException;
 import com.nasim.exception.UserNotFoundException;
-import com.nasim.model.Role;
 import com.nasim.model.User;
 import com.nasim.repository.RoleRepository;
 import com.nasim.repository.UserRepository;

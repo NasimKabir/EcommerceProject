@@ -1,41 +1,44 @@
 package com.nasim.model;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
 @Entity
+@Table(name="orders")
 @Data
-public class Order extends BaseModel {
-	
-	private static final long serialVersionUID = 1L;
+public class Order {
 
 	@Id
-	@GeneratedValue
-	private int orderId;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+	
+    @Column(updatable = false)
+    private String createdBy;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
+    private Date createdAt;
+    
 	private double orderTotalPrice;
 
 	@OneToOne
-	@JoinColumn(name = "addressId")
 	private Address address;
-
-	@ManyToOne
-	@JoinColumn(name = "userId")
-	private User user;
-
-	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<OrderItems> OrderItems;
-
+	
+	
+	@OneToMany( mappedBy = "order")
+	private List<OrderItems> items;
 
 }
