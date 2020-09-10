@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,9 +35,12 @@ public class User extends BaseModel{
 	private String lastName;
 
 	@ManyToMany(cascade = CascadeType.MERGE)
-	@JoinTable(name = "user_role", joinColumns = {
-			@JoinColumn(name = "USER_ID", referencedColumnName = "Id") }, inverseJoinColumns = {
-					@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") })
+	@JoinTable(name = "user_role", joinColumns = 
+			@JoinColumn(name = "USER_ID") , inverseJoinColumns = 
+					@JoinColumn(name = "ROLE_ID"))
 	private List<Role> roles;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Order>  order;
 
 }

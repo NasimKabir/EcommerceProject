@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,13 +34,16 @@ public class Order {
     @Column(updatable = false)
     private Date createdAt;
     
-	private double orderTotalPrice;
+	private double totalPrice;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Address address;
 	
 	
 	@OneToMany( mappedBy = "order")
 	private List<OrderItems> items;
+	
+	@ManyToOne
+	private User user;
 
 }

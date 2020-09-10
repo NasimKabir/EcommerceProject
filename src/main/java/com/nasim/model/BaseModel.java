@@ -22,14 +22,19 @@ public abstract class BaseModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     @Column(updatable = false)
     private String createdBy;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     private Date createdAt;
+    
     private String updatedBy;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    
     private Boolean isActive;
 
     @PrePersist

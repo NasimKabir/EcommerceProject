@@ -1,7 +1,10 @@
 package com.nasim.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -18,5 +21,7 @@ public class Role extends BaseModel{
 	@NotNull(message = "RoleName can not empty ")
 	private String name;
 	
+	@ManyToMany(mappedBy = "roles")
+	private List<User>user;
     
 }

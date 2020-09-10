@@ -15,11 +15,12 @@ public class OrderItems {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	private int productId;
 	private int productQuantity;
 	private double productPrice;
-	private String productName;
 
 	@ManyToOne
 	private Order order;
+	
+	@ManyToOne
+	private Product product;
 }
