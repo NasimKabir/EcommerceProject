@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Entity
@@ -18,9 +20,11 @@ public class OrderItems {
 	private int productQuantity;
 	private double productPrice;
 
+	@JsonBackReference
 	@ManyToOne
 	private Order order;
 	
+	@JsonBackReference
 	@ManyToOne
 	private Product product;
 }

@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Entity
@@ -40,9 +43,11 @@ public class Order {
 	private Address address;
 	
 	
+	@JsonManagedReference
 	@OneToMany( mappedBy = "order")
 	private List<OrderItems> items;
 	
+	@JsonBackReference
 	@ManyToOne
 	private User user;
 

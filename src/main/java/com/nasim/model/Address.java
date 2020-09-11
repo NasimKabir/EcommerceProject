@@ -5,6 +5,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Entity
@@ -19,6 +21,7 @@ public class Address extends BaseModel{
 	private String country;
 	private String zipCode;
 
+	@JsonManagedReference
 	@OneToOne(fetch = FetchType.LAZY,mappedBy = "address")
 	private Order order;
 }

@@ -8,6 +8,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 
@@ -21,6 +24,7 @@ public class Role extends BaseModel{
 	@NotNull(message = "RoleName can not empty ")
 	private String name;
 	
+	@JsonManagedReference
 	@ManyToMany(mappedBy = "roles")
 	private List<User>user;
     

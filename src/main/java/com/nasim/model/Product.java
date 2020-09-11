@@ -1,6 +1,7 @@
 package com.nasim.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,11 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.mapping.Set;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import gd.rf.thiagolemes.coursejava.entities.HashSet;
-import gd.rf.thiagolemes.coursejava.entities.Order;
-import gd.rf.thiagolemes.coursejava.entities.OrderItem;
 import lombok.Data;
 
 
@@ -49,6 +48,7 @@ public class Product extends BaseModel implements Serializable{
 	private String imagePath;
 
 
+	@JsonBackReference
 	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
 	@JoinTable(name = "products_categories", joinColumns =
 			@JoinColumn(name = "product_id"), 
@@ -56,14 +56,17 @@ public class Product extends BaseModel implements Serializable{
 			@JoinColumn(name = "category_id"))
 	private List<Category> categories;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "product")
 	private List<OrderItems> orderitems;
 
 	public List<Order> getOrders(){
-        Set<Order> set = new HashSet<>();
-        for(OrderItem x : items){
-            set.add(x.getOrder());
+        List<Order> list = new ArrayList<>();
+        for(OrderItems x : orderitems){
+            list.add(x.getOrder());
         }
-        return set;
+        return list;
     }
+	
+	
 	}
