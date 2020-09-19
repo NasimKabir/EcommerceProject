@@ -13,13 +13,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Data
+@NoArgsConstructor
 public class User extends BaseModel{
 	
 	private static final long serialVersionUID = 1L;
@@ -44,7 +45,7 @@ public class User extends BaseModel{
 					@JoinColumn(name = "ROLE_ID"))
 	private List<Role> roles;
 	
-	@JsonManagedReference
+
 	@OneToMany(mappedBy = "user")
 	private List<Order>  order;
 

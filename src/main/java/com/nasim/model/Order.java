@@ -1,5 +1,6 @@
 package com.nasim.model;
 
+import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -16,14 +17,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="orders")
 @Data
+@NoArgsConstructor
 public class Order {
 
 	@Id
@@ -37,18 +37,29 @@ public class Order {
     @Column(updatable = false)
     private Date createdAt;
     
-	private double totalPrice;
+	private double total;
+
 
 	@OneToOne(fetch = FetchType.LAZY)
 	private Address address;
 	
 	
-	@JsonManagedReference
-	@OneToMany( mappedBy = "order")
-	private List<OrderItems> items;
+
+	@OneToMany( mappedBy = "id.order")
+	private List<OrderProductItems> items;
 	
-	@JsonBackReference
+
 	@ManyToOne
 	private User user;
+	
+    @Transient
+	public Double getTotal(){
+        double sum = 0.0;
+        for (OrderProductItems x: items){
+            sum += x.getSubTotal();
+        }
+        return sum;
+    }
+
 
 }

@@ -10,10 +10,12 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "categories")
 @Data
+@NoArgsConstructor
 public class Category extends BaseModel {
 
 	private static final long serialVersionUID = 1L;

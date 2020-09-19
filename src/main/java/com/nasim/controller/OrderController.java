@@ -17,9 +17,6 @@ public class OrderController {
 
 	@PostMapping("/order")
 	public Order createOrder(@RequestBody Order order) {
-		if (order.getItems() != null) {
-			order.getItems().forEach(item -> item.setOrder(order));
-		}
 		return orderRepository.save(order);
 
 	}
