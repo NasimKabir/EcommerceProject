@@ -38,7 +38,7 @@ public class User extends BaseModel{
 	@NotNull(message = "Lastname can not empty ")
 	private String lastName;
 
-	@JsonBackReference
+	//@JsonBackReference
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "user_role", joinColumns = 
 			@JoinColumn(name = "USER_ID") , inverseJoinColumns = 

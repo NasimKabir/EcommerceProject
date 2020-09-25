@@ -5,6 +5,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,6 +25,7 @@ import com.nasim.security.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@Import(SwaggerApiConfig.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
     private final CustomUserDetailsService customUserDetailsService;
@@ -67,6 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
            .authorizeRequests()
            .antMatchers("/login").permitAll()
            .antMatchers("/api/v1/**").permitAll()
+           .antMatchers("/v2/api-docs").permitAll()
+           .antMatchers("/swagger-ui.html").permitAll()
            .anyRequest()
            .authenticated();
     }

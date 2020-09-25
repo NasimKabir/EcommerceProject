@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "products")
 @Data
-@NoArgsConstructor
 public class Product extends BaseModel implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -41,10 +40,10 @@ public class Product extends BaseModel implements Serializable{
 	@NotNull(message = "productDetails can not empty ")
 	private String productDetails;
 
-	@NotNull(message = "Gender can not empty ")
+	//@NotNull(message = "Gender can not empty ")
 	private String gender;
 	
-	@NotNull(message = "imagePath can not empty ")
+	//@NotNull(message = "imagePath can not empty ")
 	private String imagePath;
 
 

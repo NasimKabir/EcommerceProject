@@ -22,7 +22,6 @@ public class Category extends BaseModel {
 	@NotNull
 	private String name;
 
-	@JsonManagedReference
 	@ManyToMany(mappedBy = "categories")
 	private List<Product> product;
 
