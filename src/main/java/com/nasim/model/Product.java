@@ -1,7 +1,6 @@
 package com.nasim.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,7 +14,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 @Entity
@@ -35,7 +33,7 @@ public class Product extends BaseModel implements Serializable{
 	private String description;
 
 	@NotNull(message = "price can not empty ")
-	private Double price;
+	private double price;
 
 	@NotNull(message = "productDetails can not empty ")
 	private String productDetails;

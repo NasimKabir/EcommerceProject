@@ -1,12 +1,10 @@
 package com.nasim.config;
 
-import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,10 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.nasim.jwt.JwtConfig;
-import com.nasim.jwt.JwtTokenVerifier;
-import com.nasim.jwt.JwtUsernamePasswordAuthenticationFilter;
+import com.nasim.jwt.JwtTokenFilter;
 import com.nasim.security.CustomUserDetailsService;
 
 
@@ -30,42 +27,49 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
     private final CustomUserDetailsService customUserDetailsService;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtConfig jwtConfig;
-    private final SecretKey secretKey;
+	private final MyAuthenticationEntryPoint authenticationEntryPoint;
+	private final JwtTokenFilter jwtTokenFilter;
     
-    @Autowired
+	@Autowired
 	public SecurityConfig(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder,
-			JwtConfig jwtConfig, SecretKey secretKey) {
+			MyAuthenticationEntryPoint authenticationEntryPoint) {
 		super();
 		this.customUserDetailsService = customUserDetailsService;
 		this.passwordEncoder = passwordEncoder;
-		this.jwtConfig = jwtConfig;
-		this.secretKey = secretKey;
+		this.authenticationEntryPoint = authenticationEntryPoint;
+		this.jwtTokenFilter = new JwtTokenFilter();
 	}
-
-	  
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-       provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(customUserDetailsService);
-        return provider;
-    }
+	
+	
 
     
 	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
+	}
+
+
+
+    @Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+
+
+
+	@Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors()
+            .and()
            .csrf().disable()
+           .exceptionHandling()
+           .authenticationEntryPoint(authenticationEntryPoint)
+           .and()
            .sessionManagement()
            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
            .and()
-           .addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-           .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernamePasswordAuthenticationFilter.class)
            .authorizeRequests()
            .antMatchers("/login").permitAll()
            .antMatchers("/api/v1/**").permitAll()
@@ -73,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
            .antMatchers("/swagger-ui.html").permitAll()
            .anyRequest()
            .authenticated();
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
     
 	

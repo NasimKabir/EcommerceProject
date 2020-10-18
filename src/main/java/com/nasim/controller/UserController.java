@@ -1,5 +1,7 @@
 package com.nasim.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,59 +18,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nasim.exception.UserNotFoundException;
+import com.nasim.exception.Response;
+import com.nasim.exception.ResponseException;
+import com.nasim.model.LoginRequest;
 import com.nasim.model.User;
 import com.nasim.repository.RoleRepository;
 import com.nasim.repository.UserRepository;
+import com.nasim.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	RoleRepository roleRepository;
-
-	@PostMapping("/users")
-	public ResponseEntity<User> createdUser(@Valid @RequestBody User user) {
-		if (userRepository.existsByUsername(user.getUsername())) {
-			throw new RuntimeException(user.getUsername() + " doesn't exists !");
-		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setIsActive(true);
-		userRepository.save(user);
-		return new ResponseEntity<User>(user, HttpStatus.CREATED);
-	}
-
-	@GetMapping("/users")
-	public ResponseEntity<Page<User>> getUserList(Pageable pageable) {
-		Page<User> allUser = userRepository.findAll(pageable);
-		return new ResponseEntity<Page<User>>(allUser, HttpStatus.OK);
-
-	}
+	private AuthenticationService authenticationService;
 	
-	@GetMapping("/users/{id}")
-	public ResponseEntity<User>findOne(@PathVariable("id")int id){
-		User user=userRepository.findById(id)
-				  .orElseThrow(()->new UserNotFoundException("User Id - "+id+" Not found."));
-		return new ResponseEntity<User>(user,HttpStatus.OK);
-	}
-	
-	
-	@PutMapping(path = "/users/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user) {
 
-		User userUpdated=userRepository.findById(id)
-				  .orElseThrow(()->new UserNotFoundException("User Id - "+id+" Not found."));
-		userRepository.save(userUpdated);
+	 @PostMapping("/login")
+	    public ResponseEntity<?> login(@RequestBody LoginRequest login, HttpServletRequest request, HttpServletResponse response){
+	        return authenticationService.login(login);
+	    }
+	  
+	  @PostMapping("/signup")
+	    public ResponseEntity<?> Register(@Valid @RequestBody User user, HttpServletRequest request, HttpServletResponse response){
+	        return authenticationService.registerUser(user);
+	    }
 
-		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 
-	}
-	
 
 }

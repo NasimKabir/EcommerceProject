@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nasim.exception.ProductNotFoundException;
+import com.nasim.exception.ResponseException;
 import com.nasim.model.Role;
 import com.nasim.repository.RoleRepository;
 
@@ -44,14 +44,14 @@ public class RoleController {
 	@GetMapping(path = "/roles/{id}")
 	public ResponseEntity<?> getRoleId(@PathVariable("id") int id) {
 		Role role = roleRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("Role id is = " + id + " not found."));
+				.orElseThrow(() -> new ResponseException("Role id is = " + id + " not found."));
 		return new ResponseEntity<Role>(role, HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/roles/{id}")
 	public ResponseEntity<?> deleteRole(@PathVariable("id") int id) {
 		Role role = roleRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("Role id is = " + id + " not found."));
+				.orElseThrow(() -> new ResponseException("Role id is = " + id + " not found."));
 		return new ResponseEntity<Role>(role, HttpStatus.OK);
 	}
 
@@ -59,7 +59,7 @@ public class RoleController {
 	public ResponseEntity<?> updateRole(@PathVariable("id") int id,@Valid @RequestBody Role role) {
 
 		Role roleUpdated = roleRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("Role id is = " + id + " not found."));
+				.orElseThrow(() -> new ResponseException("Role id is = " + id + " not found."));
 
 		if (roleUpdated == null) {
 			return null;

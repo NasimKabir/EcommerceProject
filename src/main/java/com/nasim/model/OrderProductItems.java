@@ -1,15 +1,10 @@
 package com.nasim.model;
 
-import java.beans.Transient;
-
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data

@@ -1,6 +1,5 @@
 package com.nasim.model;
 
-import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -18,10 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.sun.istack.Nullable;
-
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="orders")

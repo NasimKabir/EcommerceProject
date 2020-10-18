@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nasim.exception.ProductNotFoundException;
+import com.nasim.exception.ResponseException;
 import com.nasim.model.Category;
 import com.nasim.repository.CategoryRepository;
 
@@ -45,14 +45,14 @@ public class CategoryController {
 	@GetMapping(path = "/category/{id}")
 	public ResponseEntity<?> getCategoryId(@PathVariable("id") int id) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("category id is = " + id + " not found."));
+				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/category/{id}")
 	public ResponseEntity<?> deleteCategory(@PathVariable("id") int id) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("category id is = " + id + " not found."));
+				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
@@ -60,7 +60,7 @@ public class CategoryController {
 	public ResponseEntity<?> updateCategory(@PathVariable("id") int id,@Valid @RequestBody Category category) {
 
 		Category categoryUpdated = categoryRepository.findById(id)
-				.orElseThrow(() -> new ProductNotFoundException("category id is = " + id + " not found."));
+				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
 
 		categoryUpdated.setName(category.getName());
 

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nasim.exception.ProductNotFoundException;
+import com.nasim.exception.ResponseException;
 import com.nasim.model.Product;
 import com.nasim.repository.CategoryRepository;
 import com.nasim.repository.ProductRepository;
@@ -62,14 +62,14 @@ public class ProductController {
 	@GetMapping(path = "/products/{id}")
 	public ResponseEntity<?>getProductId(@PathVariable("id") int id){
 		Product product=productRepository.findById(id)
-				.orElseThrow(()->new ProductNotFoundException("Product id "+id+" not found."));
+				.orElseThrow(()->new ResponseException("Product id "+id+" not found."));
 		return new ResponseEntity<Product>(product,HttpStatus.OK);
 	}
 	
 	@DeleteMapping(path = "/products/{id}")
 	public ResponseEntity<?>deleteProduct(@PathVariable("id") int id){
 		Product product=productRepository.findById(id)
-				.orElseThrow(()->new ProductNotFoundException("Product id "+id+" not found."));
+				.orElseThrow(()->new ResponseException("Product id "+id+" not found."));
 		productRepository.deleteById(id);
 		return new ResponseEntity<Product>(product,HttpStatus.OK);
 	}
@@ -78,7 +78,7 @@ public class ProductController {
 	public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody Product product) throws Exception {
 
 	Product	updatedProduct=productRepository.findById(id)
-				.orElseThrow(()->new ProductNotFoundException("Product id "+id+" not found."));
+				.orElseThrow(()->new ResponseException("Product id "+id+" not found."));
 		
 		 if(updatedProduct == null){
 	            return null;
