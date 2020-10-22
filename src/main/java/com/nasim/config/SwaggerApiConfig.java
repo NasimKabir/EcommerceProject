@@ -14,7 +14,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@Order(3)
 public class SwaggerApiConfig {
 	/*
 	 * public static final Contact DEFAULT_CONTACT = new Contact("Nasim Kabir",

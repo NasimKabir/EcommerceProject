@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Response {
-	 @JsonInclude(JsonInclude.Include.ALWAYS)
+	  @JsonInclude(JsonInclude.Include.ALWAYS)
 	    private long timestamp;
 	    @JsonInclude(JsonInclude.Include.ALWAYS)
 	    private int statusCode;

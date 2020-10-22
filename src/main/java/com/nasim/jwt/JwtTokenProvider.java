@@ -19,40 +19,40 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtTokenProvider {
-private Logger logger=LoggerFactory.getLogger(this.getClass());
-private String secretkey="SpringbootTutorials2020";
-private Long expirationInMillis=Long.valueOf("4");
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
+	private String secretkey="SpringbootTutorials2020";
+	private Long expirationInMillis=Long.valueOf("4");
 
-public String GenerateToken(Authentication authentication) {
-	UserDetailsImpl detailsImpl=(UserDetailsImpl) authentication.getPrincipal();
-	return Jwts.builder()
-			.setSubject(detailsImpl.getUsername())
-			.setIssuedAt(new Date())
-			.setExpiration(JwtUtils.getExpirationTimeHourly(expirationInMillis))
-			.signWith(SignatureAlgorithm.HS512, secretkey)
-			.compact();
-	
-}
-
-public String getUsernameFormJwtToken(String token) {
-	return Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token).getBody().getSubject();
-}
-
-public boolean validateJwtToken(String token) {
-	try {
-	Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token);
-	return true;
-	}catch(SignatureException e) {
-		logger.error("Invalid jwt signature {}", e.getMessage());
-	}catch(MalformedJwtException e) {
-		logger.error("Invalid Jwt token {}", e.getMessage());
-	}catch(ExpiredJwtException e) {
-		logger.error("Jwt token expired {}", e.getMessage());
-	}catch(UnsupportedJwtException e) {
-		logger.error("Jwt token is unsupported {}", e.getMessage());
-	}catch(IllegalArgumentException e) {
-		logger.error("Jwt claims string is empty {}", e.getMessage());
+	public String GenerateToken(Authentication authentication) {
+		UserDetailsImpl detailsImpl=(UserDetailsImpl) authentication.getPrincipal();
+		return Jwts.builder()
+				.setSubject(detailsImpl.getUsername())
+				.setIssuedAt(new Date())
+				.setExpiration(JwtUtils.getExpirationTimeHourly(expirationInMillis))
+				.signWith(SignatureAlgorithm.HS512, secretkey)
+				.compact();
+		
 	}
-	return false;
-}
+
+	public String getUsernameFormJwtToken(String token) {
+		return Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token).getBody().getSubject();
+	}
+
+	public boolean validateJwtToken(String token) {
+		try {
+		Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token);
+		return true;
+		}catch(SignatureException e) {
+			logger.error("Invalid jwt signature {}", e.getMessage());
+		}catch(MalformedJwtException e) {
+			logger.error("Invalid Jwt token {}", e.getMessage());
+		}catch(ExpiredJwtException e) {
+			logger.error("Jwt token expired {}", e.getMessage());
+		}catch(UnsupportedJwtException e) {
+			logger.error("Jwt token is unsupported {}", e.getMessage());
+		}catch(IllegalArgumentException e) {
+			logger.error("Jwt claims string is empty {}", e.getMessage());
+		}
+		return false;
+	}
 }

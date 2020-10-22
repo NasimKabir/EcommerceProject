@@ -20,9 +20,8 @@ public class LoginResponse {
 	@JsonInclude(JsonInclude.Include.ALWAYS)
 	private String username;
 	
-	/*
-	 * @JsonInclude(JsonInclude.Include.ALWAYS) private String email;
-	 */
+	@JsonInclude(JsonInclude.Include.ALWAYS)
+	private String email;
 	
 	@JsonInclude(JsonInclude.Include.ALWAYS)
 	private List<String> roles;

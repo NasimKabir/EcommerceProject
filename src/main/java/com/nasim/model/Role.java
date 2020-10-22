@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 public class Role extends BaseModel{
 	private static final long serialVersionUID = 1L;
 	
-	@Column(nullable=false,unique = true)
 	@NotNull(message = "RoleName can not empty ")
 	private String name;
 	

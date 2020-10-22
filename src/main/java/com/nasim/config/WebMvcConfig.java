@@ -10,9 +10,8 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@SuppressWarnings("deprecation")
+
 @Configuration
-@Order(2)
 public class WebMvcConfig extends WebMvcConfigurerAdapter{
 
 	@Override

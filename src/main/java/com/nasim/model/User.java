@@ -35,6 +35,8 @@ public class User extends BaseModel{
 
 	@NotNull(message = "Lastname can not empty ")
 	private String lastName;
+	@NotNull(message = "Email can not empty ")
+	private String email;
 
 	//@JsonBackReference
 	@ManyToMany(cascade = CascadeType.MERGE)
