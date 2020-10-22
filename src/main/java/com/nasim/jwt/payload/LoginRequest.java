@@ -1,4 +1,4 @@
-package com.nasim.model;
+package com.nasim.jwt.payload;
 
 import javax.validation.constraints.NotBlank;
 

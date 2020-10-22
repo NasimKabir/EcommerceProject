@@ -1,6 +1,9 @@
 package com.nasim.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +18,13 @@ import org.springframework.stereotype.Service;
 import com.nasim.exception.Response;
 import com.nasim.exception.ResponseBuilder;
 import com.nasim.jwt.JwtTokenProvider;
-import com.nasim.model.LoginRequest;
-import com.nasim.model.LoginResponse;
+import com.nasim.jwt.payload.LoginRequest;
+import com.nasim.jwt.payload.LoginResponse;
+import com.nasim.jwt.payload.SignupRequest;
+import com.nasim.model.ERole;
+import com.nasim.model.Role;
 import com.nasim.model.User;
+import com.nasim.repository.RoleRepository;
 import com.nasim.repository.UserRepository;
 import com.nasim.security.UserDetailsImpl;
 
@@ -25,7 +32,8 @@ import com.nasim.security.UserDetailsImpl;
 public class AuthenticationService {
 	@Autowired
 	private UserRepository userRepository;
-
+	@Autowired
+	private RoleRepository roleRepository;
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
@@ -33,7 +41,7 @@ public class AuthenticationService {
 
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	public Response login(LoginRequest loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -58,17 +66,33 @@ public class AuthenticationService {
 		return ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST, "Invalid Username or password");
 	}
 
-	public Response registerUser(User user) {
-		if (userRepository.existsByUsername(user.getUsername())) {
+	public Response registerUser(SignupRequest signUpRequest) {
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST, "Error: Username is already taken!");
 		}
-		
-		  if (userRepository.existsByEmail(user.getEmail())) { return
-		  ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST,"Error: Email is already in use!"); 
-		  }
-		 
-       user.setPassword(encoder.encode(user.getPassword()));
-       user.setIsActive(true);
+
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			return ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST, "Error: Email is already in use!");
+		}
+		// Create new user's account
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPhone(),
+				encoder.encode(signUpRequest.getPassword()));
+		Set<String> strRoles = signUpRequest.getRole();
+		Set<Role> role = new HashSet<>();
+
+		if (strRoles == null) {
+			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			role.add(userRole);
+		} else {
+
+			Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+					.orElseThrow(() -> new RuntimeException("Error: Admin Role is not found."));
+			role.add(adminRole);
+		}
+
+		user.setRoles(role);
+		user.setIsActive(true);
 		userRepository.save(user);
 
 		return ResponseBuilder.getSuccessResponse(HttpStatus.OK, "User registered successfully!");

@@ -1,52 +1,58 @@
 package com.nasim.model;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseModel{
-	
+public class User extends BaseModel {
+
 	private static final long serialVersionUID = 1L;
 
-	@Size(min=4,message = "Username must be atleast 4 characters")
+	@NotBlank
+	@Size(min = 4, max = 15)
 	private String username;
 
-	 @Size(min=4,message = "Password must be atleast 4 ")
-	//@JsonIgnore
-	private String password;
-
-	@NotNull(message = "Firstname can not empty ")
-	private String firstName;
-
-	@NotNull(message = "Lastname can not empty ")
-	private String lastName;
-	@NotNull(message = "Email can not empty ")
+	@NotBlank
+	@Size(max = 50)
+	@Email
 	private String email;
 
-	//@JsonBackReference
-	@ManyToMany(cascade = CascadeType.MERGE)
-	@JoinTable(name = "user_role", joinColumns = 
-			@JoinColumn(name = "USER_ID") , inverseJoinColumns = 
-					@JoinColumn(name = "ROLE_ID"))
-	private List<Role> roles;
-	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-	@OneToMany(mappedBy = "user")
-	private List<Order>  order;
+	@NotBlank
+	// @Size(min = 4, max = 15)
+	private String password;
+
+	@NotBlank
+	// @Size( max = 11, message = "digits should be 11")
+	private String phone;
+
+	public User(String username, String email, String phone, String password) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.phone = phone;
+		this.password = password;
+	}
 
 }
