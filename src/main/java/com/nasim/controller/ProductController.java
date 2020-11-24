@@ -24,6 +24,8 @@ import com.nasim.repository.CategoryRepository;
 import com.nasim.repository.ProductRepository;
 import com.nasim.util.FileUploadUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/v1")
 public class ProductController {
@@ -36,6 +38,7 @@ public class ProductController {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	@Operation(summary = "Get all product list")
 	@GetMapping("/products")
 	public ResponseEntity<Page<Product>> getProductList(Pageable pageable) {
 		Page<Product> product = productRepository.findAll(pageable);
@@ -44,58 +47,57 @@ public class ProductController {
 	}
 
 	@PostMapping(path = "/products")
-	public ResponseEntity<?> addNewProduct( @ModelAttribute Product product, @RequestParam(value = "data") String data,@RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<?> addNewProduct(@ModelAttribute Product product, @RequestParam(value = "data") String data,
+			@RequestParam("file") MultipartFile file) throws Exception {
 
-		String categoryName=categoryRepository.findAll().listIterator().next().getName();
-		 product = FileUploadUtil.convertStringToProduct(data);
-		  
-		  FileUploadUtil.uploadFile(file, categoryName, product.getProductName(), defaultFilePath);
-		  
-		  String staticPath = FileUploadUtil.creatStaticPath(product.getCategories().getClass().getName(), product.getProductName(), file.getOriginalFilename());
-		  product.setImagePath(staticPath);
-		  productRepository.save(product);
-		 
+		String categoryName = categoryRepository.findAll().listIterator().next().getName();
+		product = FileUploadUtil.convertStringToProduct(data);
+
+		FileUploadUtil.uploadFile(file, categoryName, product.getProductName(), defaultFilePath);
+
+//		  String staticPath = FileUploadUtil.creatStaticPath(product.getCategories().getClass().getName(), product.getProductName(), file.getOriginalFilename());
+		// product.setImagePath(staticPath);
+		productRepository.save(product);
+
 		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 
 	}
-	
+
 	@GetMapping(path = "/products/{id}")
-	public ResponseEntity<?>getProductId(@PathVariable("id") int id){
-		Product product=productRepository.findById(id)
-				.orElseThrow(()->new ResponseException("Product id "+id+" not found."));
-		return new ResponseEntity<Product>(product,HttpStatus.OK);
+	public ResponseEntity<?> getProductId(@PathVariable("id") Long id) {
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new ResponseException("Product id " + id + " not found."));
+		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping(path = "/products/{id}")
-	public ResponseEntity<?>deleteProduct(@PathVariable("id") int id){
-		Product product=productRepository.findById(id)
-				.orElseThrow(()->new ResponseException("Product id "+id+" not found."));
+	public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new ResponseException("Product id " + id + " not found."));
 		productRepository.deleteById(id);
-		return new ResponseEntity<Product>(product,HttpStatus.OK);
+		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
-	
+
 	@PutMapping(path = "/products/{id}")
-	public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody Product product) throws Exception {
+	public ResponseEntity<?> updateProduct(@PathVariable("id") Long id, @RequestBody Product product) throws Exception {
 
-	Product	updatedProduct=productRepository.findById(id)
-				.orElseThrow(()->new ResponseException("Product id "+id+" not found."));
-		
-		 if(updatedProduct == null){
-	            return null;
-	        }
+		Product updatedProduct = productRepository.findById(id)
+				.orElseThrow(() -> new ResponseException("Product id " + id + " not found."));
 
-	        updatedProduct.setProductName(product.getProductName());
-	        updatedProduct.setPrice(product.getPrice());
-	        updatedProduct.setGender(product.getGender());
-	        updatedProduct.setDescription(product.getDescription());
-	        updatedProduct.setProductDetails(product.getProductDetails());
-	        
-		  productRepository.save(updatedProduct);
-		 
+		if (updatedProduct == null) {
+			return null;
+		}
+
+		updatedProduct.setProductName(product.getProductName());
+		updatedProduct.setPrice(product.getPrice());
+		updatedProduct.setGender(product.getGender());
+		updatedProduct.setDescription(product.getDescription());
+		updatedProduct.setProductDetails(product.getProductDetails());
+
+		productRepository.save(updatedProduct);
+
 		return new ResponseEntity<Product>(updatedProduct, HttpStatus.CREATED);
-	
+
 	}
-	
-	
 
 }

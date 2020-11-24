@@ -21,7 +21,4 @@ public class Address extends BaseModel{
 	private String country;
 	private String zipCode;
 
-
-	@OneToOne(fetch = FetchType.LAZY,mappedBy = "address")
-	private Order order;
 }

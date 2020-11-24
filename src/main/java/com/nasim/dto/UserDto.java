@@ -1,4 +1,4 @@
-package com.nasim.jwt.payload;
+package com.nasim.dto;
 
 import java.util.Set;
 
@@ -6,12 +6,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.nasim.model.Role;
+import org.springframework.hateoas.RepresentationModel;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class SignupRequest {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserDto extends RepresentationModel<UserDto>{
 	@NotBlank
 	@Size(min = 4, max = 15)
 	private String username;
@@ -20,12 +24,6 @@ public class SignupRequest {
 	@Size(max = 50)
 	@Email
 	private String email;
-
-	private Set<String> role;
-
-	@NotBlank
-	//@Size(min = 4, max = 15)
-	private String password;
 	
 	@NotBlank
 	//@Size( max = 11, message = "digits should be 11")

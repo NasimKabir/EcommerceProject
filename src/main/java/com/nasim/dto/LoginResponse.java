@@ -1,4 +1,4 @@
-package com.nasim.jwt.payload;
+package com.nasim.dto;
 
 import java.util.List;
 

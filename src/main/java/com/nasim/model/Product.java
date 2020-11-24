@@ -53,10 +53,5 @@ public class Product extends BaseModel implements Serializable{
 	private List<Category> categories;
 	
 
-	@OneToMany(mappedBy = "id.product")
-	private List<OrderProductItems> orderitems;
-
-	
-	
 	
 	}

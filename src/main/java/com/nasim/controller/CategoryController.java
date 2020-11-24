@@ -21,18 +21,18 @@ import com.nasim.model.Category;
 import com.nasim.repository.CategoryRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/category")
 public class CategoryController {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	@GetMapping("/category")
+	@GetMapping
 	public ResponseEntity<List<Category>> getRolesList() {
 		List<Category> category = categoryRepository.findAll();
 		return new ResponseEntity<List<Category>>(category, HttpStatus.OK);
 
 	}
-	@PostMapping("/category")
+	@PostMapping 
 	public ResponseEntity<Category> createdPost( @RequestBody Category category) {
 		if (categoryRepository.existsByName(category.getName())) {
 			throw new RuntimeException(category.getName() + " doesn't exists !");
@@ -42,21 +42,21 @@ public class CategoryController {
 		return new ResponseEntity<Category>(category, HttpStatus.CREATED);
 	}
 	
-	@GetMapping(path = "/category/{id}")
+	@GetMapping(path = "/{id}")
 	public ResponseEntity<?> getCategoryId(@PathVariable("id") int id) {
 		Category category = categoryRepository.findById(id)
 				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
-	@DeleteMapping(path = "/category/{id}")
+	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<?> deleteCategory(@PathVariable("id") int id) {
 		Category category = categoryRepository.findById(id)
 				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
-	@PutMapping(path = "/category/{id}")
+	@PutMapping(path = "/{id}")
 	public ResponseEntity<?> updateCategory(@PathVariable("id") int id,@Valid @RequestBody Category category) {
 
 		Category categoryUpdated = categoryRepository.findById(id)
