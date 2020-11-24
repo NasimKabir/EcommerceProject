@@ -66,18 +66,18 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 		return ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST, "Invalid Username or password");
 	}
 
-	public Response registerUser(UserDto signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+	public Response registerUser(UserDto userDto) {
+		if (userRepository.existsByUsername(userDto.getUsername())) {
 			return ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST, "Error: Username is already taken!");
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (userRepository.existsByEmail(userDto.getEmail())) {
 			return ResponseBuilder.getFailureResponse(HttpStatus.BAD_REQUEST, "Error: Email is already in use!");
 		}
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPhone(),
-				encoder.encode(signUpRequest.getPassword()));
-		Set<String> strRoles = signUpRequest.getRole();
+		User user = new User(userDto.getUsername(), userDto.getEmail(), userDto.getPhone(),
+				encoder.encode(userDto.getPassword()));
+		Set<String> strRoles = userDto.getRole();
 		Set<Role> role = new HashSet<>();
 
 		if (strRoles == null) {

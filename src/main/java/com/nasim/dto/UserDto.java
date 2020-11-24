@@ -28,5 +28,18 @@ public class UserDto extends RepresentationModel<UserDto>{
 	@NotBlank
 	//@Size( max = 11, message = "digits should be 11")
 	private String phone;
+	private Set<String> role;
+
+	@NotBlank
+	//@Size(min = 4, max = 15)
+	private String password;
+
+	public UserDto(@NotBlank @Size(min = 4, max = 15) String username, @NotBlank @Size(max = 50) @Email String email,
+			@NotBlank String phone) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.phone = phone;
+	}
 
 }
