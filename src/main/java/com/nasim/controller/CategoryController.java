@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,59 +15,54 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nasim.dto.CategoryDto;
+import com.nasim.exception.Response;
 import com.nasim.exception.ResponseException;
 import com.nasim.model.Category;
 import com.nasim.repository.CategoryRepository;
+import com.nasim.service.impl.CategoryServiceImpl;
 
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
 	@Autowired
-	private CategoryRepository categoryRepository;
+	private CategoryServiceImpl  categoryServiceImpl;
 	
 	@GetMapping
-	public ResponseEntity<List<Category>> getRolesList() {
-		List<Category> category = categoryRepository.findAll();
-		return new ResponseEntity<List<Category>>(category, HttpStatus.OK);
+	public ResponseEntity<CollectionModel<CategoryDto>>  getCategoryList(@RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "3") Integer size,
+            @RequestParam(required = false) String[] sort,
+            @RequestParam(required = false, defaultValue = "asc") String dir) {
+		
+		@SuppressWarnings("unchecked")
+		CollectionModel<CategoryDto> categoryList = categoryServiceImpl.getCategoryList(page, size, sort, dir);
+		if(categoryList !=null) {
+			return ResponseEntity.ok(categoryList);
+		}
+		return ResponseEntity.noContent().build();
 
 	}
 	@PostMapping 
-	public ResponseEntity<Category> createdPost( @RequestBody Category category) {
-		if (categoryRepository.existsByName(category.getName())) {
-			throw new RuntimeException(category.getName() + " doesn't exists !");
-		}
-		category.setIsActive(true);
-		categoryRepository.save(category);
-		return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+	public Response createdCategory( @RequestBody CategoryDto categoryDto) {
+		return categoryServiceImpl.addNewCategory(categoryDto);
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> getCategoryId(@PathVariable("id") int id) {
-		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
-		return new ResponseEntity<Category>(category, HttpStatus.OK);
+	public Response getCategoryId(@PathVariable("id") Long id) {
+		return categoryServiceImpl.getCategoryId(id);
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<?> deleteCategory(@PathVariable("id") int id) {
-		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
-		return new ResponseEntity<Category>(category, HttpStatus.OK);
+	public Response deleteCategory(@PathVariable("id") Long id) {
+		return categoryServiceImpl.deleteCategory(id);
 	}
 
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<?> updateCategory(@PathVariable("id") int id,@Valid @RequestBody Category category) {
-
-		Category categoryUpdated = categoryRepository.findById(id)
-				.orElseThrow(() -> new ResponseException("category id is = " + id + " not found."));
-
-		categoryUpdated.setName(category.getName());
-
-		categoryRepository.save(categoryUpdated);
-
-		return new ResponseEntity<Category>(categoryUpdated, HttpStatus.CREATED);
+	public Response updateCategory(@PathVariable("id") Long id,@Valid @RequestBody CategoryDto categoryDto) {
+		return categoryServiceImpl.updateCategory(id, categoryDto);
 
 	}
 

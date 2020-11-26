@@ -29,10 +29,10 @@ public class ProductController {
 	private ProductService productService;
 	
 	@PostMapping
-    public Response productInserted(@ModelAttribute Product product, @RequestParam(value = "data") String data,
+    public Response productInserted(@ModelAttribute ProductDto productDto, @RequestParam(value = "data") String data,
 			@RequestParam("file") MultipartFile file){
 	
-                return productService.addNewProduct(product, data, file);
+                return productService.addNewProduct(productDto, data, file);
        
     }
  

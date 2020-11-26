@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.google.gson.Gson;
+import com.nasim.dto.ProductDto;
 import com.nasim.exception.FileStorageException;
 import com.nasim.model.Product;
 
@@ -66,7 +67,7 @@ public class FileUploadUtil {
 	}
 
 	public static Product convertStringToProduct(String productString) {
-		Product p = null;
+		Product  p = null;
 		try {
 			Gson g = new Gson();
 			p = g.fromJson(productString, Product.class);
