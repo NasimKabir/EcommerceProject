@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.google.gson.Gson;
 import com.nasim.exception.FileStorageException;
@@ -76,12 +77,12 @@ public class FileUploadUtil {
 
 	}
 
+	public static String creatStaticPath(String category, String productName, String fileName) {
+		return ServletUriComponentsBuilder.fromCurrentContextPath().path(category + "/" + productName + "/" + fileName)
+				.toUriString();
+	}
+
 	/*
-	 * public static String creatStaticPath(String category, String productName,
-	 * String fileName) { return
-	 * ServletUriComponentsBuilder.fromCurrentContextPath().path(category + "/" +
-	 * productName + "/" + fileName) .toUriString(); }
-	 * 
 	 * public static String creatStaticURL(String fullpath, String category, String
 	 * productName, String fileName) { return fullpath + "/" + category + "/" +
 	 * productName + "/" + fileName;

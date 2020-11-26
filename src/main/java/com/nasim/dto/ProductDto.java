@@ -2,13 +2,15 @@ package com.nasim.dto;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductDto extends RepresentationModel<ProductDto>{
 	@NotNull(message = "productCode can not empty ")
 	private String productCode;
 
@@ -26,4 +28,6 @@ public class ProductDto {
 
 	@NotNull(message = "Gender can not empty ")
 	private String gender;
+	
+	
 }

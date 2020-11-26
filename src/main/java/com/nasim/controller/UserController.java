@@ -29,7 +29,7 @@ public class UserController {
 	
 	 
 	 @PutMapping("/{id}")
-	    public Response productUpdated(@PathVariable("id") Long id,@Valid @RequestBody UserDto userDto,BindingResult result){
+	    public Response userUpdated(@PathVariable("id") Long id,@Valid @RequestBody UserDto userDto,BindingResult result){
 		
 	                return userService.updateUser(id, userDto);
 	       
