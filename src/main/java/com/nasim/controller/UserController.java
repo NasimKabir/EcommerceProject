@@ -3,8 +3,6 @@ package com.nasim.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,17 +40,12 @@ public class UserController {
 	    }
 
 	    @GetMapping
-	    public ResponseEntity<CollectionModel<UserDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
-               @RequestParam(required = false, defaultValue = "3") Integer size,
-               @RequestParam(required = false) String[] sort,
-               @RequestParam(required = false, defaultValue = "asc") String dir) {
+	    public Response getAll(
+	    		@RequestParam(required = false, defaultValue = "0") Integer page,
+                @RequestParam(required = false, defaultValue = "3") Integer size) {
 
-	        @SuppressWarnings("unchecked")
-			CollectionModel<UserDto> userList = userService.getAllUserList(page, size, sort, dir);
-	        if(userList != null) {
-	            return ResponseEntity.ok(userList);
-	        }
-	        return ResponseEntity.noContent().build();
+	        return userService.getAllUserList(page, size);
 	    }
+	    
 
 }

@@ -1,19 +1,20 @@
 package com.nasim.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedModel;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import com.nasim.assembler.UserAssembler;
 import com.nasim.dto.UserDto;
 import com.nasim.exception.Response;
 import com.nasim.exception.ResponseBuilder;
@@ -29,31 +30,25 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private ModelMapper modelMapper;
-	@Autowired
-	private UserAssembler userAssembler;
-	@SuppressWarnings("rawtypes")
-	@Autowired
-	private PagedResourcesAssembler pagedResourcesAssembler;
-
-	@SuppressWarnings("rawtypes")
+	
 	@Override
-	public PagedModel getAllUserList(int page, int size, String[] sort, String dir) {
-		PageRequest pageRequest;
-		Sort.Direction direction;
-		if (sort == null) {
-			pageRequest = PageRequest.of(page, size);
-		} else {
-			if (dir.equalsIgnoreCase("asc"))
-				direction = Sort.Direction.ASC;
-			else
-				direction = Sort.Direction.DESC;
-			pageRequest = PageRequest.of(page, size, Sort.by(direction, sort));
-		}
-		Page<User> user = userRepository.findAll(pageRequest);
-		if (!CollectionUtils.isEmpty(user.getContent())) {
-			return pagedResourcesAssembler.toModel(user, userAssembler);
-		}
-		return null;
+	public Response getAllUserList(int page, int size) {
+		List<User> product = new ArrayList<User>();
+		Pageable pagingSort = PageRequest.of(page, size);
+
+		Page<User> pageTuts = userRepository.findAll(pagingSort);
+
+		product = pageTuts.getContent();
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("productList", product);
+		response.put("currentPage", pageTuts.getNumber());
+		response.put("totalItems", pageTuts.getTotalElements());
+		response.put("totalPages", pageTuts.getTotalPages());
+		response.put("nextPage", pageTuts.hasNext());
+
+		return ResponseBuilder.getSuccessResponse(HttpStatus.OK, " retrieved Successfully", response);
+	
 	}
 
 	@Override

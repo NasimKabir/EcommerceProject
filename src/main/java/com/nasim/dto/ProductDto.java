@@ -2,13 +2,9 @@ package com.nasim.dto;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.nasim.model.Category;
@@ -40,7 +36,7 @@ public class ProductDto extends RepresentationModel<ProductDto>{
 	
 	@NotNull(message = "imagePath can not empty ")
 	private String imagePath;
-
+@ToStringExclude
 	private List<Category> categories;
 	
 	

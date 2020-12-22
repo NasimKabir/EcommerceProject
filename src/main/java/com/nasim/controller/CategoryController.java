@@ -1,13 +1,8 @@
 package com.nasim.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nasim.dto.CategoryDto;
 import com.nasim.exception.Response;
-import com.nasim.exception.ResponseException;
-import com.nasim.model.Category;
-import com.nasim.repository.CategoryRepository;
 import com.nasim.service.impl.CategoryServiceImpl;
 
 @RestController
@@ -31,20 +23,14 @@ public class CategoryController {
 	@Autowired
 	private CategoryServiceImpl  categoryServiceImpl;
 	
-	@GetMapping
-	public ResponseEntity<CollectionModel<CategoryDto>>  getCategoryList(@RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "3") Integer size,
-            @RequestParam(required = false) String[] sort,
-            @RequestParam(required = false, defaultValue = "asc") String dir) {
-		
-		@SuppressWarnings("unchecked")
-		CollectionModel<CategoryDto> categoryList = categoryServiceImpl.getCategoryList(page, size, sort, dir);
-		if(categoryList !=null) {
-			return ResponseEntity.ok(categoryList);
-		}
-		return ResponseEntity.noContent().build();
+	  @GetMapping
+	    public Response getCategoryList(
+	    		@RequestParam(required = false, defaultValue = "0") Integer page,
+              @RequestParam(required = false, defaultValue = "3") Integer size) {
 
-	}
+	        return categoryServiceImpl.getCategoryList(page, size);
+	    }
+	
 	@PostMapping 
 	public Response createdCategory( @RequestBody CategoryDto categoryDto) {
 		return categoryServiceImpl.addNewCategory(categoryDto);

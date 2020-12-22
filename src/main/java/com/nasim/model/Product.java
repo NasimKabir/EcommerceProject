@@ -12,11 +12,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
+import lombok.ToString;
 
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 @Data
 public class Product extends BaseModel implements Serializable{
 
@@ -44,12 +47,14 @@ public class Product extends BaseModel implements Serializable{
 	private String imagePath;
 
 
-	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-	@JoinTable(name = "products_categories", joinColumns =
+	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+	@JoinTable(name = "product_category", joinColumns =
 			@JoinColumn(name = "product_id"), 
 	inverseJoinColumns = 
 			@JoinColumn(name = "category_id"))
-	private List<Category> categories;
+	@JsonBackReference
+	@ToString.Exclude
+	private List<Category> category;
 	
 
 	

@@ -1,19 +1,31 @@
 package com.nasim.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedModel;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nasim.assembler.ProductAssembler;
 import com.nasim.dto.ProductDto;
 import com.nasim.dto.UserDto;
 import com.nasim.exception.Response;
@@ -34,33 +46,29 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	@Autowired
-	private ProductAssembler productAssembler;
-	@SuppressWarnings("rawtypes")
-	@Autowired
-	private PagedResourcesAssembler pagedResourcesAssembler;
+	
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
 	@Override
-	public PagedModel getProductList(int page, int size, String[] sort, String dir) {
-		PageRequest pageRequest;
-		Sort.Direction direction;
-		if (sort == null) {
-			pageRequest = PageRequest.of(page, size);
-		} else {
-			if (dir.equalsIgnoreCase("asc"))
-				direction = Sort.Direction.ASC;
-			else
-				direction = Sort.Direction.DESC;
-			pageRequest = PageRequest.of(page, size, Sort.by(direction, sort));
-		}
-		Page<Product> product = productRepository.findAll(pageRequest);
-		if (!CollectionUtils.isEmpty(product.getContent())) {
-			return pagedResourcesAssembler.toModel(product, productAssembler);
-		}
-		return null;
+	public Response getProductList(int page, int size) {
+		List<Product> product = new ArrayList<Product>();
+		Pageable pagingSort = PageRequest.of(page, size);
+
+		Page<Product> pageTuts = productRepository.findAll(pagingSort);
+
+		product = pageTuts.getContent();
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("productList", product);
+		response.put("currentPage", pageTuts.getNumber());
+		response.put("totalItems", pageTuts.getTotalElements());
+		response.put("totalPages", pageTuts.getTotalPages());
+		response.put("nextPage", pageTuts.hasNext());
+
+		return ResponseBuilder.getSuccessResponse(HttpStatus.OK, " retrieved Successfully", response);
+		
 	}
 
 	@Override
@@ -68,14 +76,14 @@ public class ProductServiceImpl implements ProductService {
 		Product product = modelMapper.map(productdto, Product.class);
 		String categoryName = categoryRepository.findAll().listIterator().next().getName();
 		product = FileUploadUtil.convertStringToProduct(data);
-
+		System.out.println(data);
 		try {
 			FileUploadUtil.uploadFile(file, categoryName, product.getProductName(), defaultFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String staticPath = FileUploadUtil.creatStaticPath(product.getCategories().getClass().getName(),
-				product.getProductName(), file.getOriginalFilename());
+		String staticPath = FileUploadUtil.creatStaticPath(categoryName, product.getProductName(),
+				file.getOriginalFilename());
 		product.setImagePath(staticPath);
 		productRepository.save(product);
 
@@ -132,4 +140,5 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	
 }

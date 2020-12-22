@@ -3,24 +3,34 @@ package com.nasim.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "categories")
-@Data
 @NoArgsConstructor
-public class Category extends BaseModel {
+@Getter
+@Setter
+public class Category {
 
-	private static final long serialVersionUID = 1L;
-	@NotNull
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	private String name;
 
-	@ManyToMany(mappedBy = "categories")
+	@ManyToMany(mappedBy = "category", fetch = FetchType.LAZY)
+	@JsonManagedReference
+	@ToString.Exclude
 	private List<Product> product;
 
 }
