@@ -1,6 +1,9 @@
-Swager Api documentation
-![image](https://user-images.githubusercontent.com/31030260/103115822-34cbbd80-468e-11eb-9e9a-f4e30c886030.png)
+# ERD
 ![Screenshot_4](https://user-images.githubusercontent.com/31030260/94522416-6e3c8a80-0251-11eb-9539-387541d8a4d0.png)
+
+# Swager Api documentation
+![image](https://user-images.githubusercontent.com/31030260/103115822-34cbbd80-468e-11eb-9e9a-f4e30c886030.png)
+
 # EcommerceProject
 Insert Category  you can provide only category name
 ![image](https://user-images.githubusercontent.com/31030260/88461257-db374b00-cec3-11ea-8be3-607ad8b014be.png)
