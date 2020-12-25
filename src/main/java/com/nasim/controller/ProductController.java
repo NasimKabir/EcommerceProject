@@ -65,13 +65,13 @@ public class ProductController {
 
 	@GetMapping
 	public Response getAllProduct(@RequestParam(required = false, defaultValue = "0") Integer page,
-			@RequestParam(required = false, defaultValue = "3") Integer size) {
+			@RequestParam(required = false, defaultValue = "9") Integer size) {
 
 		return productService.getProductList(page, size);
 	}
 
 	@GetMapping("/{category}/{product}/{fileName:.+}")
-	public void downloadPDFResource(HttpServletRequest request, HttpServletResponse response,
+	public void downloadImage(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("category") String category, @PathVariable("product") String product,
 			@PathVariable("fileName") String fileName) throws IOException {
 		File file = new File(FileUploadUtil.creatStaticURL(defaultFilePath, category, product, fileName));

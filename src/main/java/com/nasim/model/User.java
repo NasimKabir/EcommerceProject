@@ -1,6 +1,7 @@
 package com.nasim.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -46,6 +48,9 @@ public class User extends BaseModel {
 	@NotBlank
 	// @Size( max = 11, message = "digits should be 11")
 	private String phone;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Order>  order;
 
 	public User(String username, String email, String phone, String password) {
 		super();
